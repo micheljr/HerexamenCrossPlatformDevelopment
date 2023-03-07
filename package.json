@@ -15,10 +15,13 @@
     "react": "18.1.0",
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
-    "react-native-web": "~0.18.9"
+    "react-native-web": "~0.18.9",
+    "react-themable": "^0.6.4"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@types/react": "^18.0.28",
+    "@types/react-native": "^0.71.3",
     "eslint-config-rallycoding": "^3.2.0"
   },
   "private": true
