@@ -8,13 +8,14 @@ import {
   MD3DarkTheme,
   MD3Theme,
   adaptNavigationTheme,
-  ToggleButton,
 } from 'react-native-paper';
 import { useKeepAwake } from 'expo-keep-awake';
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
+
+import { LightDarkButton } from './src/components/LightDarkButton';
 
 const PERSISTENCE_KEY = 'NAVIGATION_STATE';
 const PREFERENCES_KEY = 'APP_PREFERENCES';
@@ -76,6 +77,10 @@ export default function App() {
     },
   };
 
+  const toggleTheme = () => {
+    setIsDarkMode((oldValue) => !oldValue);
+  };
+
   const combinedTheme = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
   return (
@@ -90,13 +95,7 @@ export default function App() {
           Open up App.js to start working on your app!
         </Text>
         <StatusBar style="auto" />
-        <ToggleButton.Row
-          value="left"
-          onValueChange={() => setIsDarkMode((oldValue) => !oldValue)}
-        >
-          <ToggleButton icon="flashlight" value="left" />
-          <ToggleButton icon="flashlight-off" value="right" />
-        </ToggleButton.Row>
+        <LightDarkButton toggleTheme={toggleTheme} />
       </View>
     </PaperProvider>
   );
