@@ -9,8 +9,13 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo/ngrok": "^2.5.0",
     "@expo/webpack-config": "^0.17.2",
+    "@react-navigation/bottom-tabs": "^6.5.7",
+    "@react-navigation/drawer": "^6.6.2",
     "@react-navigation/native": "^6.1.6",
+    "@react-navigation/native-stack": "^6.9.12",
+    "@react-navigation/stack": "^6.3.16",
     "expo": "~47.0.12",
     "expo-keep-awake": "~11.0.1",
     "expo-status-bar": "~1.4.2",
@@ -24,6 +29,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@expo/ngrok": "^4.1.0",
     "@types/react": "^18.0.28",
     "@types/react-native": "^0.71.3",
     "eslint-config-rallycoding": "^3.2.0"

@@ -16,6 +16,9 @@ import {
 } from '@react-navigation/native';
 
 import { LightDarkButton } from './src/components/LightDarkButton';
+import AppNavigation from './src/config/AppNavigation';
+import RootNavigation from './src/config/AppNavigation';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 const PERSISTENCE_KEY = 'NAVIGATION_STATE';
 const PREFERENCES_KEY = 'APP_PREFERENCES';
@@ -84,28 +87,32 @@ export default function App() {
   const combinedTheme = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
   return (
-    <PaperProvider theme={combinedTheme}>
-      <View
+    <SafeAreaProvider
+      style={{ backgroundColor: combinedTheme.colors.background }}
+    >
+      <PaperProvider theme={combinedTheme}>
+        <RootNavigation
+          toggleTheme={() => toggleTheme()}
+          theme={combinedTheme}
+          style={styles.container}
+        />
+        {/* <View
         style={[
           styles.container,
           { backgroundColor: combinedTheme.colors.background },
         ]}
-      >
-        <Text style={{ color: combinedTheme.colors.primary }}>
-          Open up App.js to start working on your app!
-        </Text>
-        <StatusBar style="auto" />
-        <LightDarkButton toggleTheme={toggleTheme} />
-      </View>
-    </PaperProvider>
+      >-
+      </View> */}
+      </PaperProvider>
+    </SafeAreaProvider>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    color: '#fff',
     //backgroundColor: 'black',
+
     alignItems: 'center',
     justifyContent: 'center',
   },
