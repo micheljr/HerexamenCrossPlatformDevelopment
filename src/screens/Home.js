@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, StatusBar } from 'react-native';
-import { Switch, useTheme } from 'react-native-paper';
+import { useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LightDarkButton } from '../components/LightDarkButton';
 
@@ -20,7 +20,6 @@ export default function Home({ toggleTheme }) {
         </Text>
         <StatusBar style="auto" />
         <View style={{ flexDirection: 'row' }}>
-          <Text style={{ color: theme.colors.primary }}>Light/dark </Text>
           <LightDarkButton toggle={toggleTheme} />
         </View>
       </View>

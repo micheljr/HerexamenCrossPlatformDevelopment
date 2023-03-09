@@ -1,12 +1,9 @@
 import * as React from 'react';
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet } from 'react-native';
 import {
   Provider as PaperProvider,
-  useTheme,
   MD3LightTheme,
   MD3DarkTheme,
-  MD3Theme,
   adaptNavigationTheme,
   MD2LightTheme,
   MD2DarkTheme,
@@ -16,13 +13,11 @@ import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
-
-import { LightDarkButton } from './src/components/LightDarkButton';
-import AppNavigation from './src/config/AppNavigation';
-import RootNavigation from './src/config/AppNavigation';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
-const PERSISTENCE_KEY = 'NAVIGATION_STATE';
+//import RootNavigation from './src/config/AppNavigation';
+import { DrawerNavigation } from './src/config/AppNavigation';
+
 const PREFERENCES_KEY = 'APP_PREFERENCES';
 
 export const PreferencesContext = React.createContext(null);
@@ -90,10 +85,6 @@ export default function App() {
     setIsDarkMode((oldValue) => !oldValue);
   };
 
-  const toggleVersion = () => {
-    setThemeVersion((oldValue) => (oldValue === 3 ? 2 : 3));
-  };
-
   const combinedTheme = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
   return (
@@ -101,17 +92,14 @@ export default function App() {
       style={{ backgroundColor: combinedTheme.colors.background }}
     >
       <PaperProvider theme={combinedTheme}>
-        <RootNavigation
+        {/* <RootNavigation
+          toggleTheme={() => toggleTheme()}
+          style={styles.container}
+        /> */}
+        <DrawerNavigation
           toggleTheme={() => toggleTheme()}
           style={styles.container}
         />
-        {/* <View
-        style={[
-          styles.container,
-          { backgroundColor: combinedTheme.colors.background },
-        ]}
-      >-
-      </View> */}
       </PaperProvider>
     </SafeAreaProvider>
   );
@@ -120,8 +108,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //backgroundColor: 'black',
-
     alignItems: 'center',
     justifyContent: 'center',
   },
