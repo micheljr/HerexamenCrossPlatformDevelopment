@@ -8,6 +8,8 @@ import {
   MD3DarkTheme,
   MD3Theme,
   adaptNavigationTheme,
+  MD2LightTheme,
+  MD2DarkTheme,
 } from 'react-native-paper';
 import { useKeepAwake } from 'expo-keep-awake';
 import {
@@ -33,12 +35,16 @@ export default function App() {
 
   const themeMode = isDarkMode ? 'dark' : 'light';
 
-  // const theme = {
-  //   3: {
-  //     light: MD3LightTheme,
-  //     dark: MD3DarkTheme,
-  //   }[themeVersion][themeMode],
-  // };
+  const theme = {
+    2: {
+      light: MD2LightTheme,
+      dark: MD2DarkTheme,
+    },
+    3: {
+      light: MD3LightTheme,
+      dark: MD3DarkTheme,
+    },
+  }[themeVersion][themeMode];
 
   // const preferences = React.useMemo(
   //   () => ({
@@ -84,6 +90,10 @@ export default function App() {
     setIsDarkMode((oldValue) => !oldValue);
   };
 
+  const toggleVersion = () => {
+    setThemeVersion((oldValue) => (oldValue === 3 ? 2 : 3));
+  };
+
   const combinedTheme = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
   return (
@@ -93,7 +103,6 @@ export default function App() {
       <PaperProvider theme={combinedTheme}>
         <RootNavigation
           toggleTheme={() => toggleTheme()}
-          theme={combinedTheme}
           style={styles.container}
         />
         {/* <View

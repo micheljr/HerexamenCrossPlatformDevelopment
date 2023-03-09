@@ -5,7 +5,7 @@ import Home from '../screens/Home';
 
 const RootStack = createNativeStackNavigator();
 
-export default function RootNavigation({ toggleTheme, theme }) {
+export default function RootNavigation({ toggleTheme }) {
   return (
     <NavigationContainer>
       <RootStack.Navigator>
@@ -14,7 +14,7 @@ export default function RootNavigation({ toggleTheme, theme }) {
           //     component={HomeNavigator}
           options={{ headerShown: false }}
         >
-          {() => <HomeNavigator toggleTheme={toggleTheme} theme={theme} />}
+          {() => <HomeNavigator toggleTheme={toggleTheme} />}
         </RootStack.Screen>
       </RootStack.Navigator>
     </NavigationContainer>
@@ -23,15 +23,15 @@ export default function RootNavigation({ toggleTheme, theme }) {
 
 const HomeScreen = createNativeStackNavigator();
 
-export function HomeNavigator({ toggleTheme, theme }) {
+export function HomeNavigator({ toggleTheme }) {
   return (
     <HomeScreen.Navigator>
       <HomeScreen.Screen
         name="Home"
         //   component={Home}
-        options={{ headerShown: false, toggleTheme, theme }}
+        options={{ headerShown: false, toggleTheme }}
       >
-        {() => <Home toggleTheme={toggleTheme} theme={theme} />}
+        {() => <Home toggleTheme={toggleTheme} />}
       </HomeScreen.Screen>
       {/* <HomeScreen.Screen
         name="Tabs"

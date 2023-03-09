@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Text, StatusBar } from 'react-native';
+import { Switch, useTheme } from 'react-native-paper';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LightDarkButton } from '../components/LightDarkButton';
 
@@ -7,17 +8,21 @@ import { LightDarkButton } from '../components/LightDarkButton';
 //   this.props.navigation.navigate('Tabs');
 // };
 
-export default function Home({ toggleTheme, theme }) {
+export default function Home({ toggleTheme }) {
   const { flex1 } = styles;
+  const theme = useTheme();
 
   return (
     <SafeAreaView style={[flex1, { backgroundColor: theme.colors.background }]}>
       <View style={[flex1, { backgroundColor: theme.colors.background }]}>
-        <Text style={{ color: theme.colors.primary }}>
+        <Text style={{ color: theme.colors.primary, fontSize: theme.fontSize }}>
           Open up App.js to start working on your app!
         </Text>
         <StatusBar style="auto" />
-        <LightDarkButton toggleTheme={toggleTheme} />
+        <View style={{ flexDirection: 'row' }}>
+          <Text style={{ color: theme.colors.primary }}>Light/dark </Text>
+          <LightDarkButton toggle={toggleTheme} />
+        </View>
       </View>
     </SafeAreaView>
   );

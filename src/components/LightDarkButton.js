@@ -1,12 +1,15 @@
 import * as React from 'react-native';
-import { ToggleButton } from 'react-native-paper';
+import { Switch, useTheme } from 'react-native-paper';
 
-export function LightDarkButton({ toggleTheme }) {
+export function LightDarkButton({ toggle }) {
+  const theme = useTheme();
+
   return (
-    <ToggleButton.Row value="left" onValueChange={toggleTheme}>
-      <ToggleButton icon="flashlight" value="left" />
-      <ToggleButton icon="flashlight-off" value="right" />
-    </ToggleButton.Row>
+    <Switch value={theme.dark} onValueChange={toggle} />
+    // <ToggleButton.Row value="left" onValueChange={toggleTheme}>
+    //   <ToggleButton icon="flashlight" value="left" />
+    //   <ToggleButton icon="flashlight-off" value="right" />
+    // </ToggleButton.Row>
   );
 }
 
