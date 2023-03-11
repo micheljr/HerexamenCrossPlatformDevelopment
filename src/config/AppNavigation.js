@@ -93,37 +93,33 @@ export function HomeNavigator({ toggleTheme }) {
 
   return (
     <HomeScreen.Navigator
-      screenOptions={({ navigation }) => {
-        return {
-          detachPreviousScreen: !navigation.isFocused(),
-          cardStyleInterpolator,
-          header: ({ route, options, back }) => {
-            const title = getHeaderTitle(options, route.name);
-            return (
-              <Appbar.Header elevated>
-                {back ? (
-                  <Appbar.BackAction onPress={() => navigation.goBack()} />
-                ) : navigation.openDrawer() ? (
-                  <Appbar.Action
-                    icon="menu"
-                    isLeading
-                    onPress={() => navigation.openDrawer()}
-                  />
-                ) : null}
-                <Appbar.Content title={title} />
-              </Appbar.Header>
-            );
-          },
-        };
-      }}
+      screenOptions={({ navigation }) => ({
+        detachPreviousScreen: !navigation.isFocused(),
+        cardStyleInterpolator,
+        header: ({ route, options, back }) => {
+          const title = getHeaderTitle(options, route.name);
+          return (
+            <Appbar.Header elevated>
+              {back ? (
+                <Appbar.BackAction onPress={() => navigation.goBack()} />
+              ) : navigation.openDrawer() ? (
+                <Appbar.Action
+                  icon="menu"
+                  isLeading
+                  onPress={() => navigation.openDrawer()}
+                />
+              ) : null}
+              <Appbar.Content title={title} />
+            </Appbar.Header>
+          );
+        },
+      })}
     >
       <HomeScreen.Screen
         name="Main"
-        //   component={Home}
-        options={{ headerShown: false, toggleTheme }}
-      >
-        {() => <Home toggleTheme={toggleTheme} />}
-      </HomeScreen.Screen>
+        component={Home}
+        options={{ headerShown: false }}
+      />
       {/* <HomeScreen.Screen
         name="Tabs"
         component={TabNavigator}
