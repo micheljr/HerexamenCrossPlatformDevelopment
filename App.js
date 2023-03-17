@@ -12,11 +12,21 @@ import { useKeepAwake } from 'expo-keep-awake';
 import {
   DarkTheme as NavigationDarkTheme,
   DefaultTheme as NavigationDefaultTheme,
+  NavigationContainer,
 } from '@react-navigation/native';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
+import {
+  SafeAreaProvider,
+  SafeAreaInsetsContext,
+} from 'react-native-safe-area-context';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 
 //import RootNavigation from './src/config/AppNavigation';
-import { DrawerNavigation } from './src/config/AppNavigation';
+import RootNavigation, {
+  DrawerNavigation,
+  HomeNavigator,
+} from './src/config/AppNavigation';
+
+import DrawerItems from './src/components/DrawerItems';
 
 const PREFERENCES_KEY = 'APP_PREFERENCES';
 
@@ -87,19 +97,50 @@ export default function App() {
 
   const combinedTheme = isDarkMode ? CombinedDarkTheme : CombinedDefaultTheme;
 
+  const Drawer = createDrawerNavigator();
+  const DrawerContent = () => <DrawerItems toggleTheme={toggleTheme} />;
+
   return (
     <SafeAreaProvider
       style={{ backgroundColor: combinedTheme.colors.background }}
     >
       <PaperProvider theme={combinedTheme}>
+        <NavigationContainer theme={combinedTheme}>
+          <SafeAreaInsetsContext.Consumer>
+            {(insets) => {
+              const { left, right } = insets || { left: 0, right: 0 };
+              const collapsedDrawerWidth = 250 + Math.max(left, right);
+              return (
+                <Drawer.Navigator
+                  screenOptions={{
+                    drawerStyle: {
+                      width: collapsedDrawerWidth,
+                    },
+                  }}
+                  drawerContent={() => <DrawerContent />}
+                >
+                  <Drawer.Screen
+                    name="Home"
+                    component={HomeNavigator}
+                    options={{ headerShown: false }}
+                  />
+                </Drawer.Navigator>
+              );
+            }}
+          </SafeAreaInsetsContext.Consumer>
+        </NavigationContainer>
         {/* <RootNavigation
           toggleTheme={() => toggleTheme()}
           style={styles.container}
         /> */}
-        <DrawerNavigation
+        {/* <RootNavigation
+          style={styles.container}
+          toggleTheme={() => toggleTheme()}
+        /> */}
+        {/* <DrawerNavigation
           toggleTheme={() => toggleTheme()}
           style={styles.container}
-        />
+        /> */}
       </PaperProvider>
     </SafeAreaProvider>
   );

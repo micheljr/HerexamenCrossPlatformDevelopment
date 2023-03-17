@@ -1,3 +1,4 @@
+import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View, StyleSheet, StatusBar } from 'react-native';
 import { TouchableRipple, useTheme, Text } from 'react-native-paper';
@@ -7,7 +8,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 //   this.props.navigation.navigate('Tabs');
 // };
 
-export default function Welcome({ navigation }) {
+export default function Welcome() {
+  const navigation = useNavigation();
   const { flex1 } = styles;
   const theme = useTheme();
   const insets = useSafeAreaInsets();
@@ -36,7 +38,7 @@ export default function Welcome({ navigation }) {
           },
         ]}
         onPress={() => {
-          navigation.navigate('Main');
+          navigation.navigate('Tabs');
         }}
         rippleColor="rgba(0, 0, 0, .32)"
       >

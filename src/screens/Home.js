@@ -44,9 +44,8 @@ export default function Home() {
   const onPressItem = (index) => {
     //console.log(`Pressed row: ${index}`);
     const selectedMovie = movies[index];
-    console.log('Homescreen ' + selectedMovie.imdbID);
 
-    navigation.navigate('Main', {
+    navigation.navigate('Tabs', {
       screen: 'MovieDetails',
       initial: false,
       params: { movieId: selectedMovie.imdbID },
@@ -56,7 +55,14 @@ export default function Home() {
   const Separator = () => <Divider theme={theme} />;
   const KeyExtractor = (item, index) => index.toString();
   const ListEmptyComponent = () => (
-    <View>
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+    >
       <ActivityIndicator color={theme.colors.backdrop} />
     </View>
   );
