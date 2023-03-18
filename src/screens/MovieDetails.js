@@ -18,27 +18,26 @@ export default function MovieDetails() {
       console.log(movieRequest);
 
       setMovie(movieRequest);
+      setIsLoading(false);
     };
     fetchData().catch((error) => console.log(error));
   }, [setMovie, findMovieById]);
 
-  const details = () => {
-    return (
-      <View
-        style={{
-          flex: 1,
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          backgroundColor: theme.colors.background,
-        }}
-      >
-        <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
-          {movieId}
-        </Text>
-      </View>
-    );
-  };
+  const details = () => (
+    <View
+      style={{
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.colors.background,
+      }}
+    >
+      <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
+        {movieId}
+      </Text>
+    </View>
+  );
 
   const spinner = isLoading ? (
     <View style={{ marginTop: 20 }}>

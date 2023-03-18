@@ -15,8 +15,6 @@ import { SafeAreaProvider } from 'react-native-safe-area-context';
 //import RootNavigation from './src/config/AppNavigation';
 import { DrawerNavigation } from './src/config/AppNavigation';
 
-export const PreferencesContext = React.createContext(null);
-
 export default function App() {
   useKeepAwake();
 
