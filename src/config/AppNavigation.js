@@ -1,80 +1,55 @@
 import React, { Platform } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createStackNavigator,
   CardStyleInterpolators,
 } from '@react-navigation/stack';
-import {
-  NavigationContainer,
-  useNavigation,
-  useRoute,
-  useTheme,
-} from '@react-navigation/native';
+import { NavigationContainer, useTheme } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { SafeAreaInsetsContext } from 'react-native-safe-area-context';
-import { StatusBar } from 'expo-status-bar';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { Appbar, BottomNavigation } from 'react-native-paper';
 import { useState } from 'react';
 
-import Home from '../screens/Home';
 import Welcome from '../screens/Welcome';
 import MovieDetails from '../screens/MovieDetails';
+import DrawerItems from '../components/DrawerItems';
+import MovieList from '../screens/MovieList';
 
-//const PERSISTENCE_KEY = 'NAVIGATION_STATE';
+const Drawer = createDrawerNavigator();
+const DrawerContent = ({ toggleTheme }) => (
+  <DrawerItems toggleTheme={toggleTheme} />
+);
 
-//const RootStack = createStackNavigator();
+export function DrawerNavigation({ toggleTheme }) {
+  const theme = useTheme();
 
-// export default function RootNavigation({ toggleTheme }) {
-//   const theme = useTheme();
-
-//   return (
-//     <NavigationContainer theme={theme}>
-//       <RootStack.Navigator>
-//         {/* <RootStack.Screen
-//           name="Root"
-//           component={DrawerNavigation}
-//           options={{ headerShown: false }}
-//         /> */}
-
-//         <RootStack.Screen
-//           name="Drawer"
-//           component={DrawerNavigation}
-//           initialParams={{ toggleTheme }}
-//         />
-//         {/* <DrawerNavigation toggleTheme={toggleTheme} />
-//         </RootStack.Screen> */}
-//       </RootStack.Navigator>
-//       <StatusBar style={!theme.isV3 || theme.dark ? 'light' : 'dark'} />
-//     </NavigationContainer>
-//   );
-// }
-
-// const Drawer = createDrawerNavigator();
-
-// export function DrawerNavigation({ toggleTheme }) {
-//   return (
-//     <SafeAreaInsetsContext.Consumer>
-//       {(insets) => {
-//         const { left, right } = insets || { left: 0, right: 0 };
-//         const collapsedDrawerWidth = 250 + Math.max(left, right);
-
-//         return (
-//           <Drawer.Navigator
-//             screenOptions={{
-//               drawerStyle: {
-//                 width: collapsedDrawerWidth,
-//               },
-//             }}
-//             drawerContent={() => <DrawerContent toggleTheme={toggleTheme} />}
-//           >
-//             <Drawer.Screen name="Home" component={HomeNavigator} />
-//           </Drawer.Navigator>
-//         );
-//       }}
-//     </SafeAreaInsetsContext.Consumer>
-//   );
-// }
+  return (
+    <NavigationContainer theme={theme}>
+      <SafeAreaInsetsContext.Consumer>
+        {(insets) => {
+          const { left, right } = insets || { left: 0, right: 0 };
+          const collapsedDrawerWidth = 250 + Math.max(left, right);
+          return (
+            <Drawer.Navigator
+              screenOptions={{
+                drawerStyle: {
+                  width: collapsedDrawerWidth,
+                },
+              }}
+              drawerContent={() => <DrawerContent toggleTheme={toggleTheme} />}
+            >
+              <Drawer.Screen
+                name="Home"
+                component={HomeNavigator}
+                options={{ headerShown: false }}
+              />
+            </Drawer.Navigator>
+          );
+        }}
+      </SafeAreaInsetsContext.Consumer>
+    </NavigationContainer>
+  );
+}
 
 const HomeScreen = createStackNavigator();
 
@@ -122,7 +97,7 @@ export function MovieNavigator() {
         },
       })}
     >
-      <MovieStack.Screen name="MovieList" component={Home} />
+      <MovieStack.Screen name="MovieList" component={MovieList} />
       <MovieStack.Screen name="MovieDetails" component={MovieDetails} />
     </MovieStack.Navigator>
   );
@@ -147,7 +122,7 @@ export function TabsNavigator() {
 
   const renderScene = BottomNavigation.SceneMap({
     movies: MovieNavigator,
-    books: Home,
+    books: MovieList,
   });
 
   return (
