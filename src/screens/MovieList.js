@@ -1,34 +1,42 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Image, FlatList } from 'react-native';
-import {
-  TouchableRipple,
-  useTheme,
-  Text,
-  ActivityIndicator,
-  Divider,
-} from 'react-native-paper';
+import { TouchableRipple, useTheme, Text, Divider } from 'react-native-paper';
 import { findMoviesByTitle } from '../utils/omdbApi';
+import EmptyScreen from '../components/EmptyScreen';
+import ErrorMessage from '../components/ErrorMessage';
 
 export default function MovieList() {
   const navigation = useNavigation();
-  const { flex1, columnCenter, rowCenter } = styles;
+  const { flex1, columnCenter, rowCenter, fullscreen } = styles;
   const theme = useTheme();
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [requestFailed, setRequestFailed] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const searchString = 'The+lord+of+the+rings';
-
-    const fetchData = async () => {
-      const moviesList = await findMoviesByTitle(searchString);
-
-      setMovies(moviesList.Search);
-      setIsLoading(false);
-    };
-
-    fetchData().catch((error) => console.log(error));
-  }, [setMovies, findMoviesByTitle, setIsLoading]);
+    (async () => {
+      const searchString = 'The+lord+of+the+rings';
+      try {
+        const moviesList = await findMoviesByTitle(searchString);
+        setTimeout(() => {
+          setMovies(moviesList.Search);
+          setIsLoading(false);
+        }, 1000);
+      } catch (error) {
+        setErrorMessage(error.message);
+        setIsLoading(false);
+        setRequestFailed(true);
+      }
+    })();
+  }, [
+    setMovies,
+    findMoviesByTitle,
+    setIsLoading,
+    setRequestFailed,
+    setErrorMessage,
+  ]);
 
   const onPressItem = (index) => {
     const selectedMovie = movies[index];
@@ -42,11 +50,6 @@ export default function MovieList() {
 
   const Separator = () => <Divider theme={theme} />;
   const KeyExtractor = (item, index) => index.toString();
-  const ListEmptyComponent = () => (
-    <View style={[flex1, columnCenter, { height: '100%', width: '100%' }]}>
-      <ActivityIndicator size={50} color={theme.PRIMARY_COLOR} />
-    </View>
-  );
   const RenderItem = ({ item, index }) => (
     <View
       style={[
@@ -72,20 +75,20 @@ export default function MovieList() {
     </View>
   );
 
-  // TODO isLoading verwijderen?? Flatlist wordt niet getoond nadat movies opgehaald zijn.
   return isLoading ? (
+    <EmptyScreen />
+  ) : !requestFailed ? (
     <View style={[flex1, columnCenter]}>
       <FlatList
-        style={[flex1, { width: '100%', height: '100%' }]}
+        style={[flex1, fullscreen]}
         data={movies.sort((a, b) => a.Year > b.Year)}
         KeyExtractor={KeyExtractor}
         renderItem={RenderItem}
         ItemSeparatorComponent={Separator}
-        //ListEmptyComponent={ListEmptyComponent}
       />
     </View>
   ) : (
-    <ListEmptyComponent />
+    <ErrorMessage message={errorMessage} />
   );
 }
 
@@ -102,5 +105,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  fullscreen: {
+    height: '100%',
+    width: '100%',
   },
 });

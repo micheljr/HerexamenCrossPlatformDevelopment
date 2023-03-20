@@ -1,37 +1,26 @@
-const apiKey = '2a779f03';
-const getApiUrl = () => `http://www.omdbapi.com/?apikey=${apiKey}`;
-const getTitleUrl = (title) =>
-  `http://www.omdbapi.com/?s=${title}&apikey=${apiKey}`;
+import axios from 'axios';
+
+const APIKEY = '2a779f03';
+const getApiUrl = () => `http://www.omdbapi.com/?apikey=${APIKEY}`;
 
 export const findMoviesByTitle = async (title) => {
   const apiUrl = getApiUrl();
   const url = `${apiUrl}&s=${title}`;
-  console.log(`findMoviesByTitle: ${url}`);
 
-  return await request(url, {
-    method: 'GET',
-  });
-  // return fetch(url, {
-  //   method: 'GET',
-  // })
-  //   .then((res) => res.json())
-  //   .then((json) => console.log(json))
-  //   .catch((error) => console.log(error));
+  return await getRequest(url);
 };
 
-export const findMovieById = (movieId) => {
+export const findMovieById = async (movieId) => {
   const apiUrl = getApiUrl();
   const url = `${apiUrl}&i=${movieId}`;
-  console.log(`findMovieById: ${url}`);
 
-  return request(url, {
-    method: 'GET',
-  });
+  return await getRequest(url);
 };
 
-async function request(url, options) {
-  return await fetch(url, options)
-    .then((res) => res.json())
-    .then((json) => json)
-    .catch((error) => console.log(error));
+async function getRequest(url) {
+  return await axios({
+    method: 'GET',
+    url: url,
+    timeout: 5000,
+  }).then((res) => res.data);
 }
