@@ -13,7 +13,6 @@ export const findMoviesByTitle = async (title) => {
 export const findMovieById = async (movieId) => {
   const apiUrl = getApiUrl();
   const url = `${apiUrl}&i=${movieId}`;
-
   return await getRequest(url);
 };
 

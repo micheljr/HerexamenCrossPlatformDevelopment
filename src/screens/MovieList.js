@@ -5,6 +5,7 @@ import { TouchableRipple, useTheme, Text, Divider } from 'react-native-paper';
 import { findMoviesByTitle } from '../utils/omdbApi';
 import EmptyScreen from '../components/EmptyScreen';
 import ErrorMessage from '../components/ErrorMessage';
+import MovieListItem from '../components/MovieListItem';
 
 export default function MovieList() {
   const navigation = useNavigation();
@@ -14,6 +15,10 @@ export default function MovieList() {
   const [isLoading, setIsLoading] = useState(true);
   const [requestFailed, setRequestFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const throwError = () => {
+    throw new Error('Failed!');
+  };
 
   useEffect(() => {
     (async () => {
@@ -26,8 +31,8 @@ export default function MovieList() {
         }, 1000);
       } catch (error) {
         setErrorMessage(error.message);
-        setIsLoading(false);
         setRequestFailed(true);
+        setIsLoading(false);
       }
     })();
   }, [
@@ -40,6 +45,7 @@ export default function MovieList() {
 
   const onPressItem = (index) => {
     const selectedMovie = movies[index];
+    console.log(selectedMovie);
 
     navigation.navigate('Tabs', {
       screen: 'MovieDetails',
@@ -51,33 +57,14 @@ export default function MovieList() {
   const Separator = () => <Divider theme={theme} />;
   const KeyExtractor = (item, index) => index.toString();
   const RenderItem = ({ item, index }) => (
-    <View
-      style={[
-        flex1,
-        { backgroundColor: theme.colors.background, height: 150, padding: 5 },
-      ]}
-    >
-      <TouchableRipple
-        style={flex1}
-        onPress={() => {
-          onPressItem(index);
-        }}
-        rippleColor="rgba(0, 0, 0, .32)"
-      >
-        <View style={[flex1, rowCenter, { padding: 5 }]}>
-          <Image
-            source={{ uri: item.Poster }}
-            style={{ width: 75, height: 75, borderRadius: 5, marginRight: 5 }}
-          />
-          <Text style={{ flex: 1 }}>{item.Title}</Text>
-        </View>
-      </TouchableRipple>
-    </View>
+    <MovieListItem item={item} index={index} onPressItem={onPressItem} />
   );
 
   return isLoading ? (
     <EmptyScreen />
-  ) : !requestFailed ? (
+  ) : requestFailed ? (
+    <ErrorMessage message={errorMessage} />
+  ) : (
     <View style={[flex1, columnCenter]}>
       <FlatList
         style={[flex1, fullscreen]}
@@ -87,8 +74,6 @@ export default function MovieList() {
         ItemSeparatorComponent={Separator}
       />
     </View>
-  ) : (
-    <ErrorMessage message={errorMessage} />
   );
 }
 
