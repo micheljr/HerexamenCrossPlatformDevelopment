@@ -1,7 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { View, StyleSheet, Image, FlatList } from 'react-native';
-import { TouchableRipple, useTheme, Text, Divider } from 'react-native-paper';
+import {
+  TouchableRipple,
+  useTheme,
+  Text,
+  Divider,
+  Searchbar,
+} from 'react-native-paper';
 import { findMoviesByTitle } from '../utils/omdbApi';
 import EmptyScreen from '../components/EmptyScreen';
 import ErrorMessage from '../components/ErrorMessage';
@@ -9,20 +15,19 @@ import MovieListItem from '../components/MovieListItem';
 
 export default function MovieList() {
   const navigation = useNavigation();
-  const { flex1, columnCenter, rowCenter, fullscreen } = styles;
+  const { flex1, columnCenter, fullscreen } = styles;
   const theme = useTheme();
   const [movies, setMovies] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [requestFailed, setRequestFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-
-  const throwError = () => {
-    throw new Error('Failed!');
-  };
+  const [searchQuery, setSearchQuery] = useState('lord of flies');
 
   useEffect(() => {
     (async () => {
-      const searchString = 'The+lord+of+the+rings';
+      const searchString = encodeURIComponent(searchQuery);
+      console.log(searchString);
+
       try {
         const moviesList = await findMoviesByTitle(searchString);
         setTimeout(() => {
@@ -54,6 +59,35 @@ export default function MovieList() {
     });
   };
 
+  const onChangeSearch = (query) => setSearchQuery(query);
+
+  const handleSearch = (event) => {
+    if (event.keyCode === 13) {
+      console.log(searchQuery);
+      event.preventDefault();
+
+      setIsLoading(true);
+      setMovies([]);
+
+      (async () => {
+        const searchString = encodeURIComponent(searchQuery);
+        console.log(searchString);
+
+        try {
+          const moviesList = await findMoviesByTitle(searchString);
+          setTimeout(() => {
+            setMovies(moviesList.Search);
+            setIsLoading(false);
+          }, 1000);
+        } catch (error) {
+          setErrorMessage(error.message);
+          setRequestFailed(true);
+          setIsLoading(false);
+        }
+      })();
+    }
+  };
+
   const Separator = () => <Divider theme={theme} />;
   const KeyExtractor = (item, index) => index.toString();
   const RenderItem = ({ item, index }) => (
@@ -66,6 +100,14 @@ export default function MovieList() {
     <ErrorMessage message={errorMessage} />
   ) : (
     <View style={[flex1, columnCenter]}>
+      <Searchbar
+        mode="view"
+        placeholder="Zoek"
+        value={searchQuery}
+        onChangeText={onChangeSearch}
+        onKeyPress={handleSearch}
+        style={{ width: '100%' }}
+      />
       <FlatList
         style={[flex1, fullscreen]}
         data={movies.sort((a, b) => a.Year > b.Year)}
