@@ -21,11 +21,8 @@ export default function MovieDetails() {
     const fetchData = async () => {
       try {
         const movieRequest = await findMovieById(movieId);
-        setTimeout(() => {
-          setMovie(movieRequest);
-          console.log(movieRequest);
-          setIsLoading(false);
-        }, 1000);
+        setMovie(movieRequest);
+        setIsLoading(false);
       } catch (error) {
         setErrorMessage(error.message);
         setRequestFailed(true);
@@ -42,6 +39,7 @@ export default function MovieDetails() {
         columnCenter,
         {
           backgroundColor: theme.colors.background,
+          padding: 10,
         },
       ]}
     >
@@ -52,7 +50,6 @@ export default function MovieDetails() {
             flexDirection: 'row',
             alignContent: 'center',
             justifyContent: 'flex-start',
-            height: '100%',
             width: '100%',
           },
         ]}
@@ -66,12 +63,46 @@ export default function MovieDetails() {
             marginRight: 5,
           }}
         />
-        <Text
-          variant="titleLarge"
-          style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+        <View
+          style={{
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'flex-start',
+            padding: 10,
+          }}
         >
-          {movie.Title}
-        </Text>
+          <Text
+            variant="titleLarge"
+            style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+          >
+            {movie.Title}
+          </Text>
+          <Text variant="titleSmall" style={{ color: theme.colors.primary }}>
+            {movie.Genre}
+          </Text>
+        </View>
+      </View>
+      <View
+        style={{
+          flex: 2,
+          flexDirection: 'column',
+          marginTop: 10,
+          width: '100%',
+          gap: 10,
+        }}
+      >
+        <View style={{ flex: 1, width: '100%' }}>
+          <Text>Hello</Text>
+        </View>
+        <View style={{ flex: 1, width: '100%' }}>
+          <Text>World</Text>
+        </View>
+        <View style={{ flex: 1, width: '100%' }}>
+          <Text style={{ color: theme.colors.secondary }} variant="labelLarge">
+            Plot: {movie.Plot}
+          </Text>
+        </View>
       </View>
     </View>
   );

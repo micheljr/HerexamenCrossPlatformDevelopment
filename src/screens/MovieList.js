@@ -25,10 +25,8 @@ export default function MovieList() {
       if ((searchString.trim().length || 0) > 0) {
         try {
           const moviesList = await findMoviesByTitle(searchString);
-          setTimeout(() => {
-            setMovies(moviesList.Search);
-            setIsLoading(false);
-          }, 1000);
+          setMovies(moviesList.Search);
+          setIsLoading(false);
         } catch (error) {
           setErrorMessage(error.message);
           setRequestFailed(true);

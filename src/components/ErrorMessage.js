@@ -13,7 +13,7 @@ export default function ErrorMessage({ message }) {
         columnCenter,
         fullscreen,
         {
-          backgroundColor: theme.colors.background,
+          backgroundColor: theme.colors.errorContainer,
         },
       ]}
     >
