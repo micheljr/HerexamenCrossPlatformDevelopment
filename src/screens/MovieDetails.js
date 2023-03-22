@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { findMovieById } from '../utils/omdbApi';
 import EmptyScreen from '../components/EmptyScreen';
@@ -45,9 +45,34 @@ export default function MovieDetails() {
         },
       ]}
     >
-      <Text variant="titleMedium" style={{ color: theme.colors.primary }}>
-        {movie.Title}
-      </Text>
+      <View
+        style={[
+          flex1,
+          {
+            flexDirection: 'row',
+            alignContent: 'center',
+            justifyContent: 'flex-start',
+            height: '100%',
+            width: '100%',
+          },
+        ]}
+      >
+        <Image
+          source={{ uri: movie.Poster }}
+          style={{
+            height: 250,
+            width: 150,
+            borderRadius: 5,
+            marginRight: 5,
+          }}
+        />
+        <Text
+          variant="titleLarge"
+          style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+        >
+          {movie.Title}
+        </Text>
+      </View>
     </View>
   );
 

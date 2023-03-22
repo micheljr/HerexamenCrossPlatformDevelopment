@@ -62,28 +62,6 @@ export default function MovieList() {
       setRequestFailed(false);
       setMovies([]);
       setSearchQuery(searchBarText);
-
-      // (async () => {
-      //   const searchString = encodeURIComponent(searchQuery);
-      //   console.log(searchString);
-
-      //   try {
-      //     const result = await findMoviesByTitle(searchString);
-      //     if (!result.Response) {
-      //       console.log(result);
-      //       throw new Error('Something went wrong.');
-      //     }
-      //     // setTimeout(() => {
-      //     //   setMovies(result.Search);
-      //     //   setIsLoading(false);
-      //     // }, 1000);
-      //   } catch (error) {
-      //     console.log(error.message);
-      //     setErrorMessage(error.message);
-      //     setRequestFailed(true);
-      //     setIsLoading(false);
-      //   }
-      // })();
     }
   };
 
