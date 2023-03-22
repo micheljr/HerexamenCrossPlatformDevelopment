@@ -1,13 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Image, FlatList } from 'react-native';
-import {
-  TouchableRipple,
-  useTheme,
-  Text,
-  Divider,
-  Searchbar,
-} from 'react-native-paper';
+import { View, StyleSheet, FlatList } from 'react-native';
+import { useTheme, Divider, Searchbar } from 'react-native-paper';
 import { findMoviesByTitle } from '../utils/omdbApi';
 import EmptyScreen from '../components/EmptyScreen';
 import ErrorMessage from '../components/ErrorMessage';
@@ -21,58 +15,14 @@ export default function MovieList() {
   const [isLoading, setIsLoading] = useState(true);
   const [requestFailed, setRequestFailed] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [searchQuery, setSearchQuery] = useState('lord of flies');
+  const [searchBarText, setSearchBarText] = useState('The lord of the rings');
+  const [searchQuery, setSearchQuery] = useState(searchBarText);
 
   useEffect(() => {
     (async () => {
       const searchString = encodeURIComponent(searchQuery);
-      console.log(searchString);
 
-      try {
-        const moviesList = await findMoviesByTitle(searchString);
-        setTimeout(() => {
-          setMovies(moviesList.Search);
-          setIsLoading(false);
-        }, 1000);
-      } catch (error) {
-        setErrorMessage(error.message);
-        setRequestFailed(true);
-        setIsLoading(false);
-      }
-    })();
-  }, [
-    setMovies,
-    findMoviesByTitle,
-    setIsLoading,
-    setRequestFailed,
-    setErrorMessage,
-  ]);
-
-  const onPressItem = (index) => {
-    const selectedMovie = movies[index];
-    console.log(selectedMovie);
-
-    navigation.navigate('Tabs', {
-      screen: 'MovieDetails',
-      initial: false,
-      params: { movieId: selectedMovie.imdbID },
-    });
-  };
-
-  const onChangeSearch = (query) => setSearchQuery(query);
-
-  const handleSearch = (event) => {
-    if (event.keyCode === 13) {
-      console.log(searchQuery);
-      event.preventDefault();
-
-      setIsLoading(true);
-      setMovies([]);
-
-      (async () => {
-        const searchString = encodeURIComponent(searchQuery);
-        console.log(searchString);
-
+      if ((searchString.trim().length || 0) > 0) {
         try {
           const moviesList = await findMoviesByTitle(searchString);
           setTimeout(() => {
@@ -84,7 +34,56 @@ export default function MovieList() {
           setRequestFailed(true);
           setIsLoading(false);
         }
-      })();
+      } else {
+        setErrorMessage('Geef een titel op');
+        setRequestFailed(true);
+        setIsLoading(false);
+      }
+    })();
+  }, [searchQuery]);
+
+  const onPressItem = (index) => {
+    const selectedMovie = movies[index];
+
+    navigation.navigate('Tabs', {
+      screen: 'MovieDetails',
+      initial: false,
+      params: { movieId: selectedMovie.imdbID },
+    });
+  };
+
+  const onChangeSearch = (query) => setSearchBarText(query);
+
+  const handleSearch = (event) => {
+    if (event.keyCode === 13) {
+      event.preventDefault();
+
+      setIsLoading(true);
+      setRequestFailed(false);
+      setMovies([]);
+      setSearchQuery(searchBarText);
+
+      // (async () => {
+      //   const searchString = encodeURIComponent(searchQuery);
+      //   console.log(searchString);
+
+      //   try {
+      //     const result = await findMoviesByTitle(searchString);
+      //     if (!result.Response) {
+      //       console.log(result);
+      //       throw new Error('Something went wrong.');
+      //     }
+      //     // setTimeout(() => {
+      //     //   setMovies(result.Search);
+      //     //   setIsLoading(false);
+      //     // }, 1000);
+      //   } catch (error) {
+      //     console.log(error.message);
+      //     setErrorMessage(error.message);
+      //     setRequestFailed(true);
+      //     setIsLoading(false);
+      //   }
+      // })();
     }
   };
 
@@ -94,27 +93,29 @@ export default function MovieList() {
     <MovieListItem item={item} index={index} onPressItem={onPressItem} />
   );
 
-  return isLoading ? (
-    <EmptyScreen />
-  ) : requestFailed ? (
-    <ErrorMessage message={errorMessage} />
-  ) : (
+  return (
     <View style={[flex1, columnCenter]}>
       <Searchbar
         mode="view"
         placeholder="Zoek"
-        value={searchQuery}
+        value={searchBarText}
         onChangeText={onChangeSearch}
         onKeyPress={handleSearch}
         style={{ width: '100%' }}
       />
-      <FlatList
-        style={[flex1, fullscreen]}
-        data={movies.sort((a, b) => a.Year > b.Year)}
-        KeyExtractor={KeyExtractor}
-        renderItem={RenderItem}
-        ItemSeparatorComponent={Separator}
-      />
+      {isLoading ? (
+        <EmptyScreen />
+      ) : requestFailed ? (
+        <ErrorMessage message={errorMessage} />
+      ) : (
+        <FlatList
+          style={[flex1, fullscreen]}
+          data={movies.sort((a, b) => a.Year > b.Year)}
+          KeyExtractor={KeyExtractor}
+          renderItem={RenderItem}
+          ItemSeparatorComponent={Separator}
+        />
+      )}
     </View>
   );
 }
