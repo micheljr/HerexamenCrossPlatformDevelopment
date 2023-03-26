@@ -14,6 +14,7 @@ import Welcome from '../screens/Welcome';
 import MovieDetails from '../screens/MovieDetails';
 import DrawerItems from '../components/DrawerItems';
 import MovieList from '../screens/MovieList';
+import Profile from '../screens/Profile';
 
 const Drawer = createDrawerNavigator();
 const DrawerContent = ({ toggleTheme }) => (
@@ -97,8 +98,8 @@ export function MovieNavigator() {
         },
       })}
     >
-      <MovieStack.Screen name="MovieList" component={MovieList} />
-      <MovieStack.Screen name="MovieDetails" component={MovieDetails} />
+      <MovieStack.Screen name="Movies" component={MovieList} />
+      <MovieStack.Screen name="Details" component={MovieDetails} />
     </MovieStack.Navigator>
   );
 }
@@ -113,21 +114,20 @@ export function TabsNavigator() {
       unfocusedIcon: 'book-outline',
     },
     {
-      key: 'books',
-      title: 'Books',
-      focusedIcon: 'movie',
-      unfocusedIcon: 'movie-outline',
+      key: 'profile',
+      title: 'Profile',
+      focusedIcon: 'account',
+      unfocusedIcon: 'account-outline',
     },
   ]);
 
   const renderScene = BottomNavigation.SceneMap({
     movies: MovieNavigator,
-    books: MovieList,
+    profile: Profile,
   });
 
   return (
     <BottomNavigation
-      screenOptions={{ headerShown: false }}
       navigationState={{ index, routes }}
       onIndexChange={setIndex}
       renderScene={renderScene}

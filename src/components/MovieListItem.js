@@ -1,7 +1,6 @@
 import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { Text, TouchableRipple, useTheme } from 'react-native-paper';
-import { View } from 'react-native-web';
 
 export default function MovieListItem({ item, index, onPressItem }) {
   const theme = useTheme();
@@ -79,11 +78,3 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
 });
-
-// {
-//   "Title": "The Lord of the Rings: The Two Towers",
-//   "Year": "2002",
-//   "imdbID": "tt0347436",
-//   "Type": "game",
-//   "Poster": "https://m.media-amazon.com/images/M/MV5BODI0Mzk3OTM4N15BMl5BanBnXkFtZTgwMTM4MTk4MDE@._V1_SX300.jpg"
-// }

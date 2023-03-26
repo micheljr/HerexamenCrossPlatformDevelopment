@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import {
   Provider as PaperProvider,
   MD3LightTheme,
@@ -11,8 +11,6 @@ import {
   DefaultTheme as NavigationDefaultTheme,
 } from '@react-navigation/native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-
-//import RootNavigation from './src/config/AppNavigation';
 import { DrawerNavigation } from './src/config/AppNavigation';
 
 export default function App() {

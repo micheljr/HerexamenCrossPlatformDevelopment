@@ -1,6 +1,6 @@
 import { useRoute } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, ScrollView } from 'react-native';
 import { Text, useTheme } from 'react-native-paper';
 import { findMovieById } from '../utils/omdbApi';
 import EmptyScreen from '../components/EmptyScreen';
@@ -33,78 +33,123 @@ export default function MovieDetails() {
   }, [setMovie, findMovieById, setIsLoading, setRequestFailed]);
 
   const Details = () => (
-    <View
-      style={[
-        flex1,
-        columnCenter,
-        {
-          backgroundColor: theme.colors.background,
-          padding: 10,
-        },
-      ]}
-    >
+    <ScrollView style={{ flex: 1, backgroundColor: theme.colors.background }}>
       <View
         style={[
           flex1,
+          columnCenter,
           {
-            flexDirection: 'row',
-            alignContent: 'center',
-            justifyContent: 'flex-start',
-            width: '100%',
+            backgroundColor: theme.colors.background,
+            paddingTop: 10,
+            paddingBottom: 10,
+            paddingLeft: 20,
+            paddingRight: 20,
           },
         ]}
       >
-        <Image
-          source={{ uri: movie.Poster }}
-          style={{
-            height: 250,
-            width: 150,
-            borderRadius: 5,
-            marginRight: 5,
-          }}
-        />
+        <View
+          style={[
+            flex1,
+            {
+              flexDirection: 'row',
+              alignContent: 'center',
+              justifyContent: 'flex-start',
+              width: '100%',
+              height: 250,
+              marginBottom: 25,
+            },
+          ]}
+        >
+          <Image
+            source={{ uri: movie.Poster }}
+            style={{
+              height: 250,
+              width: 150,
+              marginRight: 5,
+            }}
+          />
+          <View
+            style={{
+              flex: 1,
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'flex-start',
+              padding: 10,
+            }}
+          >
+            <Text
+              variant="titleLarge"
+              style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+            >
+              {movie.Title}
+            </Text>
+            <Text variant="titleSmall" style={{ color: theme.colors.primary }}>
+              {movie.Genre}
+            </Text>
+          </View>
+        </View>
         <View
           style={{
             flex: 1,
             flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'flex-start',
-            padding: 10,
+            marginTop: 10,
+            width: '100%',
+            gap: 10,
           }}
         >
-          <Text
-            variant="titleLarge"
-            style={{ color: theme.colors.primary, fontWeight: 'bold' }}
-          >
-            {movie.Title}
-          </Text>
-          <Text variant="titleSmall" style={{ color: theme.colors.primary }}>
-            {movie.Genre}
-          </Text>
+          <View style={{ flex: 1, width: '100%' }}>
+            <Text
+              variant="titleMedium"
+              style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+            >
+              Released
+            </Text>
+            <Text
+              style={{ color: theme.colors.secondary }}
+              variant="labelLarge"
+            >
+              {movie.Released}
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+            >
+              Writers
+            </Text>
+            <Text
+              style={{ color: theme.colors.secondary }}
+              variant="labelLarge"
+            >
+              {movie.Writer}
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+            >
+              Cast
+            </Text>
+            <Text
+              style={{ color: theme.colors.secondary }}
+              variant="labelLarge"
+            >
+              {movie.Actors}
+            </Text>
+            <Text
+              variant="titleMedium"
+              style={{ color: theme.colors.primary, fontWeight: 'bold' }}
+            >
+              Plot
+            </Text>
+            <Text
+              style={{ color: theme.colors.secondary }}
+              variant="labelLarge"
+            >
+              {movie.Plot}
+            </Text>
+          </View>
         </View>
       </View>
-      <View
-        style={{
-          flex: 2,
-          flexDirection: 'column',
-          marginTop: 10,
-          width: '100%',
-          gap: 10,
-        }}
-      >
-        <View style={{ flex: 1, width: '100%' }}>
-          <Text>Hello</Text>
-        </View>
-        <View style={{ flex: 1, width: '100%' }}>
-          <Text>World</Text>
-        </View>
-        <View style={{ flex: 1, width: '100%' }}>
-          <Text style={{ color: theme.colors.secondary }} variant="labelLarge">
-            Plot: {movie.Plot}
-          </Text>
-        </View>
-      </View>
-    </View>
+    </ScrollView>
   );
 
   return isLoading ? (
@@ -126,36 +171,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-// {
-//   "Title": "The Lord of the Rings: The Two Towers",
-//   "Year": "2002",
-//   "Rated": "T",
-//   "Released": "22 Oct 2002",
-//   "Runtime": "N/A",
-//   "Genre": "Action, Adventure, Fantasy",
-//   "Director": "N/A",
-//   "Writer": "Philippa Boyens (screenplay), Nuno Miranda (adaptation), Nuno Miranda (translation), J.R.R. Tolkien (novel)",
-//   "Actors": "Viggo Mortensen, Orlando Bloom, John Rhys-Davies, Elijah Wood",
-//   "Plot": "You control Aragorn, Legolas and Gimli fighting across the Plains of Rohan battling evil alike to the ferocious battle at Helms Deep.",
-//   "Language": "English",
-//   "Country": "USA",
-//   "Awards": "N/A",
-//   "Poster": "https://m.media-amazon.com/images/M/MV5BODI0Mzk3OTM4N15BMl5BanBnXkFtZTgwMTM4MTk4MDE@._V1_SX300.jpg",
-//   "Ratings": [
-//     {
-//       "Source": "Internet Movie Database",
-//       "Value": "8.3/10"
-//     }
-//   ],
-//   "Metascore": "N/A",
-//   "imdbRating": "8.3",
-//   "imdbVotes": "2,750",
-//   "imdbID": "tt0347436",
-//   "Type": "game",
-//   "DVD": "N/A",
-//   "BoxOffice": "N/A",
-//   "Production": "N/A",
-//   "Website": "N/A",
-//   "Response": "True"
-// }

@@ -4,10 +4,6 @@ import { View, StyleSheet, StatusBar } from 'react-native';
 import { TouchableRipple, useTheme, Text } from 'react-native-paper';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-// const handleEnterPress = () => {
-//   this.props.navigation.navigate('Tabs');
-// };
-
 export default function Welcome() {
   const navigation = useNavigation();
   const { flex1 } = styles;
@@ -44,10 +40,10 @@ export default function Welcome() {
       >
         <View style={[flex1, { backgroundColor: theme.colors.background }]}>
           <Text variant="titleLarge" style={{ color: theme.colors.primary }}>
-            Welkom!
+            Welcome!
           </Text>
           <Text variant="titleMedium" style={{ color: theme.colors.secondary }}>
-            Raak aan om verder te gaan
+            Touch to continue
           </Text>
           <StatusBar style="auto" />
         </View>

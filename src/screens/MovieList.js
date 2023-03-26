@@ -1,7 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, FlatList } from 'react-native';
-import { useTheme, Divider, Searchbar } from 'react-native-paper';
+import { View, StyleSheet, FlatList, Platform } from 'react-native';
+import {
+  useTheme,
+  Divider,
+  Searchbar as WebSearchBar,
+} from 'react-native-paper';
+import { SearchBar as IosSearchbar } from 'react-native-ios-kit';
 import { findMoviesByTitle } from '../utils/omdbApi';
 import EmptyScreen from '../components/EmptyScreen';
 import ErrorMessage from '../components/ErrorMessage';
@@ -44,7 +49,7 @@ export default function MovieList() {
     const selectedMovie = movies[index];
 
     navigation.navigate('Tabs', {
-      screen: 'MovieDetails',
+      screen: 'Details',
       initial: false,
       params: { movieId: selectedMovie.imdbID },
     });
@@ -53,6 +58,7 @@ export default function MovieList() {
   const onChangeSearch = (query) => setSearchBarText(query);
 
   const handleSearch = (event) => {
+    console.log(event.keyCode);
     if (event.keyCode === 13) {
       event.preventDefault();
 
@@ -63,6 +69,13 @@ export default function MovieList() {
     }
   };
 
+  const handleIOSSearch = () => {
+    setIsLoading(true);
+    setRequestFailed(false);
+    setMovies([]);
+    setSearchQuery(searchBarText);
+  };
+  const isIos = Platform.OS === 'ios';
   const Separator = () => <Divider theme={theme} />;
   const KeyExtractor = (item, index) => index.toString();
   const RenderItem = ({ item, index }) => (
@@ -70,15 +83,27 @@ export default function MovieList() {
   );
 
   return (
-    <View style={[flex1, columnCenter]}>
-      <Searchbar
-        mode="view"
-        placeholder="Zoek"
-        value={searchBarText}
-        onChangeText={onChangeSearch}
-        onKeyPress={handleSearch}
-        style={{ width: '100%' }}
-      />
+    <View style={[flex1, columnCenter, { width: '100%', height: '100%' }]}>
+      {isIos ? (
+        <IosSearchbar
+          placeholder="Search"
+          value={searchBarText}
+          onValueChange={onChangeSearch}
+          onBlur={handleIOSSearch}
+          withCancel
+          animated
+          theme={theme}
+        />
+      ) : (
+        <WebSearchBar
+          mode="view"
+          placeholder="Search"
+          value={searchBarText}
+          onChangeText={onChangeSearch}
+          onKeyPress={handleSearch}
+          style={{ width: '100%' }}
+        />
+      )}
       {isLoading ? (
         <EmptyScreen />
       ) : requestFailed ? (
